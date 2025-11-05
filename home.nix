@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, osUsername, ... }:
 let
   aliases = {
     ls = "ls --color=auto";
@@ -17,8 +17,8 @@ let
 in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "johnsonlee";
-  home.homeDirectory = "/home/johnsonlee";
+  home.username = osUsername;
+  home.homeDirectory = "/home/${osUsername}";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release

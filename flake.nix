@@ -12,10 +12,11 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
+      osUsername = "johnsonlee";
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-      homeConfigurations."johnsonlee" =
+      homeConfigurations."${osUsername}" =
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
 
@@ -25,6 +26,7 @@
 
           # Optionally use extraSpecialArgs
           # to pass through arguments to home.nix
+          extraSpecialArgs = { osUsername = osUsername; };
         };
     };
 }
