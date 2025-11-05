@@ -82,6 +82,7 @@ in {
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
+
   };
 
   # Home Manager can also manage your environment variables through
@@ -119,6 +120,17 @@ in {
       fi # added by Nix installer
       [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
     '';
+  };
+
+  programs.git = {
+    enable = true;
+    settings = {
+      user = {
+        name = "JohnsonLee";
+        email = "0xjohnsonlee@gmail.com";
+      };
+      init.defaultBranch = "main";
+    };
   };
 
   programs.fzf.enable = true;
