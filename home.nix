@@ -14,6 +14,20 @@ let
 
     hms = "home-manager switch";
   };
+  # TODO: manage token with yaxitech/ragenix
+  claude_alt = { name, url, token_path, reasoner, chat, }:
+    (pkgs.writeShellScriptBin name ''
+      # Environment variables for the Anthropic CLI tool.
+      # https://docs.anthropic.com/en/docs/claude-code/settings#environment-variables
+
+      export ANTHROPIC_AUTH_TOKEN=''${ANTHROPIC_AUTH_TOKEN-$(cat ${token_path})}
+      export ANTHROPIC_BASE_URL=${url}
+      export ANTHROPIC_MODEL=''${ANTHROPIC_MODEL-"${reasoner}"}
+      export API_TIMEOUT_MS=600000
+      export ANTHROPIC_SMALL_FAST_MODEL=''${ANTHROPIC_SMALL_FAST_MODEL-"${chat}"}
+
+      exec claude "$@"
+    '');
 in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -67,6 +81,21 @@ in {
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
+    (claude_alt {
+      name = "glm";
+      url = "https://open.bigmodel.cn/api/anthropic";
+      reasoner = "glm-4.6";
+      chat = "glm-4.6-air";
+      token_path = "${config.home.homeDirectory}/.glm_token";
+    })
+
+    (claude_alt {
+      name = "deepseek-cli";
+      url = "https://api.deepseek.com/anthropic";
+      token_path = "${config.home.homeDirectory}/.deepseek_token";
+      reasoner = "deepseek-reasoner";
+      chat = "deepseek-chat";
+    })
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
