@@ -1,4 +1,4 @@
-{ config, pkgs, osUsername, ... }:
+{ config, pkgs, agenix, osUsername, ... }:
 let
   aliases = {
     ls = "ls --color=auto";
@@ -14,7 +14,6 @@ let
 
     hms = "home-manager switch";
   };
-  # TODO: manage token with yaxitech/ragenix
   claude_alt = { name, url, token_path, reasoner, chat, }:
     (pkgs.writeShellScriptBin name ''
       # Environment variables for the Anthropic CLI tool.
@@ -69,6 +68,8 @@ in {
     pkgs.zig
     pkgs.zoxide
 
+    agenix.packages.${pkgs.system}.default
+
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -86,15 +87,15 @@ in {
       url = "https://open.bigmodel.cn/api/anthropic";
       reasoner = "glm-4.6";
       chat = "glm-4.6-air";
-      token_path = "${config.home.homeDirectory}/.glm_token";
+      token_path = config.age.secrets.glm.path;
     })
 
     (claude_alt {
       name = "deepseek-cli";
       url = "https://api.deepseek.com/anthropic";
-      token_path = "${config.home.homeDirectory}/.deepseek_token";
       reasoner = "deepseek-reasoner";
       chat = "deepseek-chat";
+      token_path = config.age.secrets.deepseek.path;
     })
   ];
 
@@ -171,4 +172,5 @@ in {
   programs.direnv.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+
 }
