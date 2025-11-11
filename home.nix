@@ -29,6 +29,7 @@ let
 
       exec claude "$@"
     '');
+  localBinPath = "${config.home.homeDirectory}/.local/bin";
 in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -54,7 +55,6 @@ in {
     pkgs.dircolors-solarized
     pkgs.fd
     pkgs.gemini-cli
-    pkgs.go
     pkgs.jq
     pkgs.lazydocker
     pkgs.lazygit
@@ -140,7 +140,7 @@ in {
     DEEPSEEK_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
   };
 
-  home.sessionPath = [ "${config.home.homeDirectory}/.local/bin" "$PNPM_HOME" ];
+  home.sessionPath = [ "${localBinPath}" "$PNPM_HOME" ];
 
   programs.bash = {
     enable = true;
@@ -200,6 +200,11 @@ in {
         agent_prelude = "default";
       };
     };
+  };
+
+  programs.go = {
+    enable = true;
+    env = { GOBIN = "${localBinPath}"; };
   };
 
   nixpkgs.config.allowUnfree = true;
