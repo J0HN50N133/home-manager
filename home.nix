@@ -5,12 +5,14 @@ let
     ll = "ls -alF";
     la = "ls -A";
     l = "ls -CF";
+    ".." = "cd ..";
 
     grep = "grep --color=auto";
     fgrep = "fgrep --color=auto";
     egrep = "egrep --color=auto";
 
     lg = "lazygit";
+    ai = "aichat";
 
     hms = "home-manager switch";
   };
@@ -135,6 +137,7 @@ in {
     EDITOR = "nvim";
     #WINHOME = "/mnt/c/Users/JohnsonLee";
     PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
+    DEEPSEEK_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
   };
 
   home.sessionPath = [ "${config.home.homeDirectory}/.local/bin" "$PNPM_HOME" ];
@@ -170,6 +173,34 @@ in {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   programs.direnv.enable = true;
+
+  programs.aichat = {
+    enable = true;
+
+    settings = {
+      clients = [{
+        type = "openai-compatible";
+        name = "deepseek";
+        api_base = "https://api.deepseek.com/v1";
+        api_key_env = "DEEPSEEK_API_KEY";
+        models = [{
+          name = "deepseek-chat";
+          supports_function_calling = true;
+          supports_vision = false;
+        }];
+      }];
+    };
+
+    agents = {
+      deepseek = {
+        model = "deepseek-chat";
+        temperature = 0.7;
+        top_p = 0.9;
+        use_tools = "fs,web_search";
+        agent_prelude = "default";
+      };
+    };
+  };
 
   nixpkgs.config.allowUnfree = true;
 
