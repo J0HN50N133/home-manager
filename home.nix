@@ -93,12 +93,21 @@ in {
     })
 
     (claude_alt {
-      name = "deepseek-cli";
+      name = "ds-cli";
       url = "https://api.deepseek.com/anthropic";
       reasoner = "deepseek-reasoner";
       chat = "deepseek-chat";
       token_path = config.age.secrets.deepseek.path;
     })
+
+    (claude_alt {
+      name = "kimi";
+      url = "https://api.kimi.com/coding/";
+      reasoner = "kimi-for-coding";
+      chat = "kimi-for-coding";
+      token_path = config.age.secrets.kimi.path;
+    })
+
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

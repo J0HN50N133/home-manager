@@ -4,4 +4,5 @@ let
 in {
   "deepseek.age".publicKeys = [ publicKey ];
   "glm.age".publicKeys = [ publicKey ];
+  "kimi.age".publicKeys = [ publicKey ];
 }

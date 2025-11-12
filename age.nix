@@ -4,6 +4,7 @@
     secrets = {
       deepseek = { file = secrets/deepseek.age; };
       glm = { file = secrets/glm.age; };
+      kimi = { file = secrets/kimi.age; };
     };
   };
 }
