@@ -49,7 +49,6 @@ in {
   # environment.
   home.packages = [
     pkgs.ast-grep
-    pkgs.claude-code
     pkgs.cmake
     pkgs.cppman
     pkgs.dircolors-solarized
@@ -214,6 +213,32 @@ in {
   programs.go = {
     enable = true;
     env = { GOBIN = "${localBinPath}"; };
+  };
+
+  programs.claude-code = {
+    enable = true;
+    settings = {
+      memory.source = ./claude-memory/claude-memory.md;
+      statusLine = {
+        type = "command";
+        command = ''
+          input=$(cat)
+          model_name=$(echo "$input" | jq -r '.model.display_name')
+          dir_name=$(basename "$(echo "$input" | jq -r '.workspace.current_dir')")
+
+          # Get git branch if in a git repository
+          git_branch=""
+          current_dir="$(echo "$input" | jq -r '.workspace.current_dir')"
+          if cd "$current_dir" 2>/dev/null && git rev-parse --git-dir >/dev/null 2>&1; then
+            git_branch=$(git branch --show-current 2>/dev/null || echo "detached")
+            git_branch=":$git_branch"
+          fi
+
+          echo "[$model_name] 📁 $dir_name$git_branch"
+        '';
+        padding = 0;
+      };
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
