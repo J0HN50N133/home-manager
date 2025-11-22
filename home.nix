@@ -30,6 +30,7 @@ let
       exec claude "$@"
     '');
   localBinPath = "${config.home.homeDirectory}/.local/bin";
+  cargoBinPath = "${config.home.homeDirectory}/.cargo/bin/";
 in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -68,6 +69,7 @@ in {
     pkgs.zellij
     pkgs.zig
     pkgs.zoxide
+    pkgs.github-cli
 
     agenix.packages.${pkgs.system}.default
 
@@ -148,7 +150,7 @@ in {
     DEEPSEEK_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
   };
 
-  home.sessionPath = [ "${localBinPath}" "$PNPM_HOME" ];
+  home.sessionPath = [ localBinPath "$PNPM_HOME" cargoBinPath ];
 
   programs.bash = {
     enable = true;
