@@ -70,6 +70,8 @@ in {
     pkgs.zig
     pkgs.zoxide
     pkgs.github-cli
+    pkgs.podman
+    pkgs.podman-compose
 
     agenix.packages.${pkgs.system}.default
 
