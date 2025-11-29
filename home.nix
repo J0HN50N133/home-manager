@@ -32,6 +32,7 @@ let
   localBinPath = "${config.home.homeDirectory}/.local/bin";
   cargoBinPath = "${config.home.homeDirectory}/.cargo/bin/";
 in {
+  imports = [ ./fzf-pushd.nix ];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = osUsername;
@@ -247,4 +248,5 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
+  nixp.fzf-pushd.enable = true;
 }
