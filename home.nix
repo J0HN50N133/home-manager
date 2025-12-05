@@ -1,4 +1,10 @@
-{ config, pkgs, agenix, osUsername, ... }:
+{
+  config,
+  pkgs,
+  agenix,
+  osUsername,
+  ...
+}:
 let
   aliases = {
     ls = "ls --color=auto";
@@ -16,7 +22,14 @@ let
 
     hms = "home-manager switch";
   };
-  claude_alt = { name, url, token_path, reasoner, chat, }:
+  claude_alt =
+    {
+      name,
+      url,
+      token_path,
+      reasoner,
+      chat,
+    }:
     (pkgs.writeShellScriptBin name ''
       # Environment variables for the Anthropic CLI tool.
       # https://docs.anthropic.com/en/docs/claude-code/settings#environment-variables
@@ -31,7 +44,8 @@ let
     '');
   localBinPath = "${config.home.homeDirectory}/.local/bin";
   cargoBinPath = "${config.home.homeDirectory}/.cargo/bin/";
-in {
+in
+{
   imports = [ ./fzf-pushd.nix ];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -56,23 +70,23 @@ in {
     pkgs.dircolors-solarized
     pkgs.fd
     pkgs.gemini-cli
+    pkgs.github-cli
     pkgs.jq
     pkgs.lazydocker
     pkgs.lazygit
-    pkgs.neovim
     pkgs.nodejs
     pkgs.pnpm
+    pkgs.podman
+    pkgs.podman-compose
     pkgs.ripgrep
     pkgs.rustup
+    pkgs.tree-sitter # for nvim
     pkgs.typst
     pkgs.uv
     pkgs.yazi
     pkgs.zellij
     pkgs.zig
     pkgs.zoxide
-    pkgs.github-cli
-    pkgs.podman
-    pkgs.podman-compose
 
     agenix.packages.${pkgs.system}.default
 
@@ -147,13 +161,16 @@ in {
   #  /etc/profiles/per-user/johnsonlee/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    EDITOR = "nvim";
     #WINHOME = "/mnt/c/Users/JohnsonLee";
     PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
     DEEPSEEK_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
   };
 
-  home.sessionPath = [ localBinPath "$PNPM_HOME" cargoBinPath ];
+  home.sessionPath = [
+    localBinPath
+    "$PNPM_HOME"
+    cargoBinPath
+  ];
 
   programs.bash = {
     enable = true;
@@ -191,17 +208,21 @@ in {
     enable = true;
 
     settings = {
-      clients = [{
-        type = "openai-compatible";
-        name = "deepseek";
-        api_base = "https://api.deepseek.com/v1";
-        api_key_env = "DEEPSEEK_API_KEY";
-        models = [{
-          name = "deepseek-chat";
-          supports_function_calling = true;
-          supports_vision = false;
-        }];
-      }];
+      clients = [
+        {
+          type = "openai-compatible";
+          name = "deepseek";
+          api_base = "https://api.deepseek.com/v1";
+          api_key_env = "DEEPSEEK_API_KEY";
+          models = [
+            {
+              name = "deepseek-chat";
+              supports_function_calling = true;
+              supports_vision = false;
+            }
+          ];
+        }
+      ];
     };
 
     agents = {
@@ -217,7 +238,9 @@ in {
 
   programs.go = {
     enable = true;
-    env = { GOBIN = "${localBinPath}"; };
+    env = {
+      GOBIN = "${localBinPath}";
+    };
   };
 
   programs.claude-code = {
@@ -244,6 +267,16 @@ in {
         padding = 0;
       };
     };
+  };
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    withNodeJs = true;
+  };
+  xdg.configFile."nvim" = {
+    source = ./nvim;
+    recursive = true;
   };
 
   nixpkgs.config.allowUnfree = true;

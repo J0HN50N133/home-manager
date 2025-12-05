@@ -1,0 +1,16 @@
+return {}
+-- return {
+--   "neovim/nvim-lspconfig",
+--   ---@class PluginLspOpts
+--   opts = {
+--     ---@type lspconfig.options
+--     servers = {
+--       ["rust-analyzer"] = {
+--         diagnostics = {
+--           enable = true,
+--           disabled = { "proc-macro-disabled" },
+--         },
+--       },
+--     },
+--   },
+-- }
