@@ -42,6 +42,14 @@ let
 
       exec claude "$@"
     '');
+
+  fzf-tab-completion = pkgs.fetchFromGitHub {
+    owner = "lincheney";
+    repo = "fzf-tab-completion";
+    rev = "4850357beac6f8e37b66bd78ccf90008ea3de40b";
+    sha256 = "02kxsxkf7wk7s6q5faqli4546dwf73y3mpjkhl1bls6r2r2jn1x6";
+  };
+
   localBinPath = "${config.home.homeDirectory}/.local/bin";
   cargoBinPath = "${config.home.homeDirectory}/.cargo/bin/";
 in
@@ -182,6 +190,9 @@ in
         . ${config.home.profileDirectory}/etc/profile.d/nix.sh;
       fi # added by Nix installer
       [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+
+      source ${fzf-tab-completion}/bash/fzf-bash-completion.sh
+      bind -x '"\t": fzf_bash_completion'
     '';
   };
 
