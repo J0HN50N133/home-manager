@@ -77,7 +77,7 @@ in
     pkgs.cppman
     pkgs.dircolors-solarized
     pkgs.fd
-    pkgs.gemini-cli
+    pkgs.gemini-cli-bin
     pkgs.github-cli
     pkgs.jq
     pkgs.lazydocker
