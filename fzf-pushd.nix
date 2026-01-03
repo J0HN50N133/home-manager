@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -13,14 +18,14 @@ let
   dir-search-command = ''
     (find -L . -mindepth 1 -type d -print 2>/dev/null || \
      find -L . -mindepth 1 -type d) | \
-    "${fzfBin}" --no-sort --tac \
+    "${fzfBin}" --no-sort --reverse --tac \
         --header="Select directory to PUSHD (Alt+Shift+C)"
   '';
-in {
+in
+{
   # 1. 定义模块的启用选项
   options.nixp.fzf-pushd = {
-    enable = mkEnableOption
-      "fzf pushd (Alt+Shift+C) functionality injected into enabled shell (Bash/Zsh).";
+    enable = mkEnableOption "fzf pushd (Alt+Shift+C) functionality injected into enabled shell (Bash/Zsh).";
   };
 
   # 2. 配置逻辑：如果本模块启用，则执行以下条件判断
