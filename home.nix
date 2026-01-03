@@ -172,6 +172,10 @@ in
     #WINHOME = "/mnt/c/Users/JohnsonLee";
     PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
     DEEPSEEK_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
+
+    # PODMAN related
+    DOCKER_HOST = "unix:///run/user/$UID/podman/podman.sock";
+    DOCKER_ROOTLESS = "1";
   };
 
   home.sessionPath = [
@@ -179,6 +183,40 @@ in
     "$PNPM_HOME"
     cargoBinPath
   ];
+
+  systemd.user.sockets.podman = {
+    Unit = {
+      Description = "Podman API Socket";
+      Documentation = "man:podman-system-service(1)";
+    };
+    Socket = {
+      ListenStream = "%t/podman/podman.sock";
+      SocketMode = "0660";
+    };
+    Install = {
+      WantedBy = [ "sockets.target" ];
+    };
+  };
+
+  systemd.user.services.podman = {
+    Unit = {
+      Description = "Podman API Service";
+      Requires = "podman.socket";
+      After = "podman.socket";
+      Documentation = "man:podman-system-service(1)";
+      StartLimitIntervalSec = 0;
+    };
+    Service = {
+      Type = "exec";
+      KillMode = "process";
+      Environment = "LOGGING=\"--log-level=info\"";
+      # 注意：这里直接引用 pkgs.podman，确保路径绝对正确
+      ExecStart = "${pkgs.podman}/bin/podman $LOGGING system service";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
 
   programs.bash = {
     enable = true;
