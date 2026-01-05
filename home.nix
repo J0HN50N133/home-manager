@@ -72,10 +72,12 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
+    pkgs.amp-cli
     pkgs.ast-grep
     pkgs.cmake
     pkgs.cppman
     pkgs.dircolors-solarized
+    pkgs.docker-compose # compatible with podman(ideally)
     pkgs.fd
     pkgs.gemini-cli-bin
     pkgs.github-cli
@@ -85,12 +87,12 @@ in
     pkgs.nodejs
     pkgs.pnpm
     pkgs.podman
-    pkgs.podman-compose
     pkgs.ripgrep
     pkgs.rustup
     pkgs.tree-sitter # for nvim
     pkgs.typst
     pkgs.uv
+    pkgs.witr
     pkgs.yazi
     pkgs.zellij
     pkgs.zig
@@ -113,8 +115,8 @@ in
     (claude_alt {
       name = "glm";
       url = "https://open.bigmodel.cn/api/anthropic";
-      reasoner = "glm-4.6";
-      chat = "glm-4.6-air";
+      reasoner = "glm-4.7";
+      chat = "glm-4.7";
       token_path = config.age.secrets.glm.path;
     })
 
