@@ -93,7 +93,6 @@ in
     pkgs.typst
     pkgs.uv
     pkgs.witr
-    pkgs.yazi
     pkgs.zellij
     pkgs.zig
     pkgs.zoxide
@@ -325,6 +324,11 @@ in
     defaultEditor = true;
     withNodeJs = true;
   };
+
+  programs.yazi = {
+    enable = true;
+  };
+
   xdg.configFile."nvim" = {
     source = ./nvim;
     recursive = true;
