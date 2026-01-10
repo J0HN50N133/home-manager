@@ -79,8 +79,6 @@ in
     pkgs.dircolors-solarized
     pkgs.docker-compose # compatible with podman(ideally)
     pkgs.fd
-    pkgs.gemini-cli-bin
-    pkgs.github-cli
     pkgs.jq
     pkgs.lazydocker
     pkgs.lazygit
@@ -296,7 +294,7 @@ in
   programs.claude-code = {
     enable = true;
     settings = {
-      memory.source = ./claude-memory/claude-memory.md;
+      memory.source = ./agent-memory/memory.md;
       statusLine = {
         type = "command";
         command = ''
@@ -317,6 +315,12 @@ in
         padding = 0;
       };
     };
+  };
+
+  programs.gemini-cli = {
+    enable = true;
+    package = pkgs.gemini-cli-bin;
+    context.GEMINI = ./agent-memory/memory.md;
   };
 
   programs.neovim = {
