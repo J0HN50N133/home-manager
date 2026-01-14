@@ -80,6 +80,7 @@ in
     pkgs.nodejs
     pkgs.pnpm
     pkgs.podman
+    pkgs.rootlesskit # for podman rootless
     pkgs.ripgrep
     pkgs.rustup
     pkgs.tree-sitter # for nvim
