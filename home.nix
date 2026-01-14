@@ -68,6 +68,7 @@ in
   home.packages = [
     pkgs.amp-cli
     pkgs.ast-grep
+    pkgs.bottom
     pkgs.cmake
     pkgs.cppman
     pkgs.carapace
