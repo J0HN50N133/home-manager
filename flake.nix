@@ -5,6 +5,7 @@
     # Specify the source of Home Manager and Nixpkgs.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     agenix.url = "github:yaxitech/ragenix";
+    bft.url = "github:J0HN50N133/bft";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,6 +17,7 @@
       nixpkgs,
       agenix,
       home-manager,
+      bft,
       ...
     }:
     let
@@ -40,6 +42,7 @@
         extraSpecialArgs = {
           inherit osUsername;
           inherit agenix;
+          inherit bft;
         };
       };
     };

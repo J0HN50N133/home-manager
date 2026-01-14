@@ -2,6 +2,7 @@
   config,
   pkgs,
   agenix,
+  bft,
   osUsername,
   ...
 }:
@@ -43,13 +44,6 @@ let
       exec claude "$@"
     '');
 
-  fzf-tab-completion = pkgs.fetchFromGitHub {
-    owner = "lincheney";
-    repo = "fzf-tab-completion";
-    rev = "4850357beac6f8e37b66bd78ccf90008ea3de40b";
-    sha256 = "02kxsxkf7wk7s6q5faqli4546dwf73y3mpjkhl1bls6r2r2jn1x6";
-  };
-
   localBinPath = "${config.home.homeDirectory}/.local/bin";
   cargoBinPath = "${config.home.homeDirectory}/.cargo/bin/";
 in
@@ -76,6 +70,7 @@ in
     pkgs.ast-grep
     pkgs.cmake
     pkgs.cppman
+    pkgs.carapace
     pkgs.dircolors-solarized
     pkgs.docker-compose # compatible with podman(ideally)
     pkgs.fd
@@ -96,6 +91,7 @@ in
     pkgs.zoxide
 
     agenix.packages.${pkgs.system}.default
+    bft.packages.${pkgs.system}.default
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -227,9 +223,7 @@ in
         . ${config.home.profileDirectory}/etc/profile.d/nix.sh;
       fi # added by Nix installer
       [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
-
-      source ${fzf-tab-completion}/bash/fzf-bash-completion.sh
-      bind -x '"\t": fzf_bash_completion'
+      source <(bft --init-script) 
     '';
   };
 
@@ -321,6 +315,10 @@ in
     enable = true;
     package = pkgs.gemini-cli-bin;
     context.GEMINI = ./agent-memory/memory.md;
+  };
+
+  programs.opencode = {
+    enable = true;
   };
 
   programs.neovim = {
