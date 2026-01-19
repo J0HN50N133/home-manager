@@ -19,10 +19,20 @@ let
     egrep = "egrep --color=auto";
 
     lg = "lazygit";
-    ai = "aichat";
 
     hms = "home-manager switch";
   };
+  aichat_alt =
+    {
+      name,
+      model,
+      client_prefix,
+      token_path,
+    }:
+    (pkgs.writeShellScriptBin name ''
+      export ${client_prefix}_API_KEY=''${${client_prefix}_API_KEY-$(cat ${token_path})}
+      exec aichat --model ${model} "$@"
+    '');
   claude_alt =
     {
       name,
@@ -131,6 +141,20 @@ in
       token_path = config.age.secrets.kimi.path;
     })
 
+    (aichat_alt {
+      name = "ai";
+      model = "deepseek:deepseek-chat";
+      client_prefix = "DEEPSEEK";
+      token_path = config.age.secrets.deepseek.path;
+    })
+
+    (aichat_alt {
+      name = "gmn";
+      model = "gemini:gemini-3-flash-preview";
+      client_prefix = "GEMINI";
+      token_path = config.age.secrets.gemini.path;
+    })
+
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -169,6 +193,7 @@ in
     #WINHOME = "/mnt/c/Users/JohnsonLee";
     PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
     DEEPSEEK_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
+    GEMINI_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
 
     # PODMAN related
     DOCKER_HOST = "unix:///run/user/$UID/podman/podman.sock";
@@ -226,6 +251,10 @@ in
       fi # added by Nix installer
       [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
       source <(bft --init-script) 
+      # nvm is not installed via nix
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     '';
   };
 
@@ -254,17 +283,14 @@ in
     settings = {
       clients = [
         {
+          type = "gemini";
+          name = "gemini";
+          api_base = "https://generativelanguage.googleapis.com/v1beta";
+        }
+        {
           type = "openai-compatible";
           name = "deepseek";
           api_base = "https://api.deepseek.com/v1";
-          api_key_env = "DEEPSEEK_API_KEY";
-          models = [
-            {
-              name = "deepseek-chat";
-              supports_function_calling = true;
-              supports_vision = false;
-            }
-          ];
         }
       ];
     };
