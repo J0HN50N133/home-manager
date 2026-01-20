@@ -14,10 +14,14 @@
 
   nixConfig = {
     extra-substituters = [
+      "https://bft.cachix.org"
+      "https://wurzelpfropf.cachix.org" # for cachix
       "https://nix-community.cachix.org"
     ];
 
     extra-trusted-public-keys = [
+      "bft.cachix.org-1:P2MmxFYsQAYjagDpkbFWC7yI985UKOs4RNnzSqtdkkQ="
+      "wurzelpfropf.cachix.org-1:ilZwK5a6wJqVr7Fyrzp4blIEkGK+LJT0QrpWr1qBNq0="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };

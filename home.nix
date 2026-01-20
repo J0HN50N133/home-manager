@@ -1,11 +1,4 @@
-{
-  config,
-  pkgs,
-  agenix,
-  bft,
-  osUsername,
-  ...
-}:
+{ config, pkgs, agenix, bft, osUsername, ... }:
 let
   aliases = {
     ls = "ls --color=auto";
@@ -22,25 +15,12 @@ let
 
     hms = "home-manager switch";
   };
-  aichat_alt =
-    {
-      name,
-      model,
-      client_prefix,
-      token_path,
-    }:
+  aichat_alt = { name, model, client_prefix, token_path, }:
     (pkgs.writeShellScriptBin name ''
       export ${client_prefix}_API_KEY=''${${client_prefix}_API_KEY-$(cat ${token_path})}
       exec aichat --model ${model} "$@"
     '');
-  claude_alt =
-    {
-      name,
-      url,
-      token_path,
-      reasoner,
-      chat,
-    }:
+  claude_alt = { name, url, token_path, reasoner, chat, }:
     (pkgs.writeShellScriptBin name ''
       # Environment variables for the Anthropic CLI tool.
       # https://docs.anthropic.com/en/docs/claude-code/settings#environment-variables
@@ -56,8 +36,7 @@ let
 
   localBinPath = "${config.home.homeDirectory}/.local/bin";
   cargoBinPath = "${config.home.homeDirectory}/.cargo/bin/";
-in
-{
+in {
   imports = [ ./fzf-pushd.nix ];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -200,11 +179,7 @@ in
     DOCKER_ROOTLESS = "1";
   };
 
-  home.sessionPath = [
-    localBinPath
-    "$PNPM_HOME"
-    cargoBinPath
-  ];
+  home.sessionPath = [ localBinPath "$PNPM_HOME" cargoBinPath ];
 
   systemd.user.sockets.podman = {
     Unit = {
@@ -215,9 +190,7 @@ in
       ListenStream = "%t/podman/podman.sock";
       SocketMode = "0660";
     };
-    Install = {
-      WantedBy = [ "sockets.target" ];
-    };
+    Install = { WantedBy = [ "sockets.target" ]; };
   };
 
   systemd.user.services.podman = {
@@ -231,13 +204,11 @@ in
     Service = {
       Type = "exec";
       KillMode = "process";
-      Environment = "LOGGING=\"--log-level=info\"";
+      Environment = ''LOGGING="--log-level=info"'';
       # 注意：这里直接引用 pkgs.podman，确保路径绝对正确
       ExecStart = "${pkgs.podman}/bin/podman $LOGGING system service";
     };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
+    Install = { WantedBy = [ "default.target" ]; };
   };
 
   programs.bash = {
@@ -308,9 +279,7 @@ in
 
   programs.go = {
     enable = true;
-    env = {
-      GOBIN = "${localBinPath}";
-    };
+    env = { GOBIN = "${localBinPath}"; };
   };
 
   programs.claude-code = {
@@ -345,9 +314,7 @@ in
     context.GEMINI = ./agent-memory/memory.md;
   };
 
-  programs.opencode = {
-    enable = true;
-  };
+  programs.opencode = { enable = true; };
 
   programs.neovim = {
     enable = true;
@@ -355,9 +322,7 @@ in
     withNodeJs = true;
   };
 
-  programs.yazi = {
-    enable = true;
-  };
+  programs.yazi = { enable = true; };
 
   xdg.configFile."nvim" = {
     source = ./nvim;
