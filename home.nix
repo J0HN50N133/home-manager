@@ -20,6 +20,11 @@ let
       export ${client_prefix}_API_KEY=''${${client_prefix}_API_KEY-$(cat ${token_path})}
       exec aichat --model ${model} "$@"
     '');
+  codex_alt = { name, token_path, }:
+    (pkgs.writeShellScriptBin name ''
+      export OPENAI_API_KEY=''${OPENAI_API_KEY-$(cat ${token_path})}
+      exec codex "$@"
+    '');
   claude_alt = { name, url, token_path, reasoner, chat, }:
     (pkgs.writeShellScriptBin name ''
       # Environment variables for the Anthropic CLI tool.
@@ -134,6 +139,11 @@ in {
       token_path = config.age.secrets.gemini.path;
     })
 
+    (codex_alt {
+      name = "aiberm";
+      token_path = config.age.secrets.aiberm.path;
+    })
+
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -171,8 +181,8 @@ in {
   home.sessionVariables = {
     #WINHOME = "/mnt/c/Users/JohnsonLee";
     PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
-    DEEPSEEK_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
-    GEMINI_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
+    #DEEPSEEK_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
+    #GEMINI_API_KEY = "$(cat ${config.age.secrets.deepseek.path})";
 
     # PODMAN related
     DOCKER_HOST = "unix:///run/user/$UID/podman/podman.sock";
@@ -341,6 +351,22 @@ in {
     enable = true;
     defaultEditor = true;
     withNodeJs = true;
+  };
+
+  programs.codex = {
+    enable = true;
+    settings = {
+      model = "openai/gpt-5.2-codex";
+      model_provider = "aiberm";
+      model_providers = {
+        aiberm = {
+          name = "Aiberm API";
+          base_url = "https://aiberm.com/v1";
+          env_key = "OPENAI_API_KEY";
+          wire_api = "responses";
+        };
+      };
+    };
   };
 
   programs.yazi = { enable = true; };
