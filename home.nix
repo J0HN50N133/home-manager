@@ -60,7 +60,6 @@ in {
     pkgs.bottom
     pkgs.cmake
     pkgs.cppman
-    pkgs.codex
     pkgs.carapace
     pkgs.dircolors-solarized
     pkgs.docker-compose # compatible with podman(ideally)
