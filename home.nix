@@ -60,6 +60,7 @@ in {
     pkgs.bottom
     pkgs.cmake
     pkgs.cppman
+    pkgs.codex
     pkgs.carapace
     pkgs.dircolors-solarized
     pkgs.docker-compose # compatible with podman(ideally)
@@ -70,7 +71,7 @@ in {
     pkgs.nodejs
     pkgs.pnpm
     pkgs.podman
-    pkgs.rootlesskit # for podman rootless
+    pkgs.su # for podman rootless
     pkgs.ripgrep
     pkgs.rustup
     pkgs.tree-sitter # for nvim
@@ -304,6 +305,27 @@ in {
           echo "[$model_name] 📁 $dir_name$git_branch"
         '';
         padding = 0;
+      };
+      hooks = {
+        Stop = [{
+          hooks = [{
+            type = "command";
+            command = "claude-bell -c 2";
+          }];
+        }];
+        PermissionRequest = [{
+          hooks = [{
+            type = "command";
+            command = "claude-bell -c 3 -i 100";
+          }];
+        }];
+        Notification = [{
+          matcher = "idle_prompt";
+          hooks = [{
+            type = "command";
+            command = "claude-bell -c 2 -i 150";
+          }];
+        }];
       };
     };
   };
