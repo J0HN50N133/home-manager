@@ -17,6 +17,8 @@ This file provides shared context for AI coding assistants (Claude, Gemini, Deep
 2. Follow idiomatic style for each language; code should be self-explanatory.
 3. Identify and eliminate code smells: rigidity, redundancy, circular dependencies, fragility, obscurity, data clumps, unnecessary complexity.
 4. When code smells are detected, immediately alert and propose improvements.
+5. use descriptive variable/function/structure/class name
+6. commit: always do conventional commit!
 
 ---
 
@@ -44,6 +46,7 @@ This file provides shared context for AI coding assistants (Claude, Gemini, Deep
 - **Python**: Use `uv` to run Python code.
 - **Docker**: Use `podman` instead of docker (compatible via docker-compose).
 - **Variable naming**: Always use descriptive names; write simple and clean code.
+- CSS: UnoCSS > vanilla css > tailwindcss
 
 ---
 

@@ -294,8 +294,8 @@ in {
 
   programs.claude-code = {
     enable = true;
+    memory = { source = ./agent-memory/memory.md; };
     settings = {
-      memory.source = ./agent-memory/memory.md;
       statusLine = {
         type = "command";
         command = ''
@@ -366,6 +366,7 @@ in {
           wire_api = "responses";
         };
       };
+      notify = [ "claude-bell" "-c" "2" ];
     };
   };
 
