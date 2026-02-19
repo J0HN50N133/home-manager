@@ -7,6 +7,7 @@
       kimi = { file = secrets/kimi.age; };
       gemini = { file = secrets/gemini.age; };
       aiberm = { file = secrets/aiberm.com.age; };
+      minimaxi = { file = secrets/minimaxi.age; };
     };
   };
 }

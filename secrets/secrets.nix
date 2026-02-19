@@ -7,4 +7,5 @@ in {
   "kimi.age".publicKeys = [ publicKey ];
   "gemini.age".publicKeys = [ publicKey ];
   "aiberm.com.age".publicKeys = [ publicKey ];
+  "minimaxi.age".publicKeys = [ publicKey ];
 }

@@ -111,6 +111,14 @@ in {
     })
 
     (claude_alt {
+      name = "minimaxi";
+      url = "https://api.minimaxi.com/anthropic";
+      reasoner = "MiniMax-M2.5";
+      chat = "MiniMax-M2.5";
+      token_path = config.age.secrets.minimaxi.path;
+    })
+
+    (claude_alt {
       name = "ds-cli";
       url = "https://api.deepseek.com/anthropic";
       reasoner = "deepseek-reasoner";
