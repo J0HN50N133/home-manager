@@ -14,6 +14,7 @@ let
     lg = "lazygit";
 
     hms = "home-manager switch";
+    neovide = "neovide.exe --wsl";
   };
   aichat_alt = { name, model, client_prefix, token_path, }:
     (pkgs.writeShellScriptBin name ''
@@ -237,6 +238,11 @@ in {
       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
       [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     '';
+    profileExtra = ''
+       if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+        . $HOME/.nix-profile/etc/profile.d/nix.sh
+      fi
+    '';
   };
 
   programs.git = {
@@ -353,22 +359,22 @@ in {
     withNodeJs = true;
   };
 
-  programs.codex = {
-    enable = true;
-    settings = {
-      model = "openai/gpt-5.2-codex";
-      model_provider = "aiberm";
-      model_providers = {
-        aiberm = {
-          name = "Aiberm API";
-          base_url = "https://aiberm.com/v1";
-          env_key = "OPENAI_API_KEY";
-          wire_api = "responses";
-        };
-      };
-      notify = [ "claude-bell" "-c" "2" ];
-    };
-  };
+  #programs.codex = {
+  #  enable = true;
+  #  settings = {
+  #    model = "openai/gpt-5.2-codex";
+  #    model_provider = "aiberm";
+  #    model_providers = {
+  #      aiberm = {
+  #        name = "Aiberm API";
+  #        base_url = "https://aiberm.com/v1";
+  #        env_key = "OPENAI_API_KEY";
+  #        wire_api = "responses";
+  #      };
+  #    };
+  #    notify = [ "claude-bell" "-c" "2" ];
+  #  };
+  #};
 
   programs.yazi = { enable = true; };
 
